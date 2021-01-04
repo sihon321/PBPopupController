@@ -11,11 +11,15 @@ import SwiftUI
 @available(iOS 13.0, *)
 public extension View {
     func popup<PopupContent>(isPresented: Binding<Bool>, isOpen: Binding<Bool>? = nil, onPresent: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, onOpen: (() -> Void)? = nil, onClose: (() -> Void)? = nil, @ViewBuilder popupContent: @escaping () -> PopupContent) -> some View where PopupContent : View {
-        return PBPopupViewWrapper<Self, PopupContent>(isPresented: isPresented, isOpen: isOpen ?? Binding.constant(false), onPresent: onPresent, onDismiss: onDismiss, onOpen: onOpen, onClose: onClose, popupContent: popupContent) {
-            self
-        }.edgesIgnoringSafeArea(.all)
+        return ZStack {
+            Text(isPresented.wrappedValue ? "1" : "2").hidden()
+            Text(isOpen?.wrappedValue ?? false ? "3" : "4").hidden()
+            PBPopupViewWrapper<Self, PopupContent>(isPresented: isPresented, isOpen: isOpen ?? Binding.constant(false), onPresent: onPresent, onDismiss: onDismiss, onOpen: onOpen, onClose: onClose, popupContent: popupContent) {
+                self
+            }.edgesIgnoringSafeArea(.all)
+        }
     }
-    
+
     func popup(isPresented: Binding<Bool>, isOpen: Binding<Bool>? = nil, onPresent: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil, onOpen: (() -> Void)? = nil, onClose: (() -> Void)? = nil, popupContentController: UIViewController) -> some View {
         return PBPopupViewWrapper<Self, EmptyView>(isPresented: isPresented, isOpen: isOpen ?? Binding.constant(false), onPresent: onPresent, onDismiss: onDismiss, onOpen: onOpen, onClose: onClose, popupContentController: popupContentController) {
             self
